@@ -1,0 +1,607 @@
+
+// --- Grid mixins ----------------------------------------------------------------------
+
+// Generate the extra small columns
+.make-xs-column(@columns; @gutter: @grid-gutter-width) {
+  position: relative;
+  body.ltr & { float: left; }
+  body.rtl & { float: right; }
+  width: percentage((@columns / @grid-columns));
+  // Prevent columns from collapsing when empty
+  min-height: 1px;
+  // Inner gutter via padding
+  padding-left:  (@gutter / 2);
+  padding-right: (@gutter / 2);
+}
+
+// Generate the small columns
+.make-sm-column(@columns; @gutter: @grid-gutter-width) {
+  position: relative;
+  // Prevent columns from collapsing when empty
+  min-height: 1px;
+  // Inner gutter via padding
+  padding-left:  (@gutter / 2);
+  padding-right: (@gutter / 2);
+
+  // Calculate width based on number of columns available
+  @media (min-width: @screen-sm-min) {
+    body.ltr & { float: left; }
+    body.rtl & { float: right; }
+    width: percentage((@columns / @grid-columns));
+  }
+}
+
+// Generate the small column offsets
+.make-sm-column-offset(@columns) {
+  @media (min-width: @screen-sm-min) {
+    margin-right: percentage((@columns / @grid-columns));
+  }
+}
+.make-sm-column-push(@columns) {
+  @media (min-width: @screen-sm-min) {
+    right: percentage((@columns / @grid-columns));
+  }
+}
+.make-sm-column-pull(@columns) {
+  @media (min-width: @screen-sm-min) {
+    left: percentage((@columns / @grid-columns));
+  }
+}
+
+// Generate the medium columns
+.make-md-column(@columns; @gutter: @grid-gutter-width) {
+  position: relative;
+  // Prevent columns from collapsing when empty
+  min-height: 1px;
+  // Inner gutter via padding
+  padding-left:  (@gutter / 2);
+  padding-right: (@gutter / 2);
+
+  // Calculate width based on number of columns available
+  @media (min-width: @screen-md-min) {
+    body.ltr & { float: left; }
+    body.rtl & { float: right; }
+    width: percentage((@columns / @grid-columns));
+  }
+}
+
+// Generate the medium column offsets
+.make-md-column-offset(@columns) {
+  @media (min-width: @screen-md-min) {
+    margin-right: percentage((@columns / @grid-columns));
+  }
+}
+.make-md-column-push(@columns) {
+  @media (min-width: @screen-md) {
+    right: percentage((@columns / @grid-columns));
+  }
+}
+.make-md-column-pull(@columns) {
+  @media (min-width: @screen-md-min) {
+    left: percentage((@columns / @grid-columns));
+  }
+}
+
+// Generate the large columns
+.make-lg-column(@columns; @gutter: @grid-gutter-width) {
+  position: relative;
+  // Prevent columns from collapsing when empty
+  min-height: 1px;
+  // Inner gutter via padding
+  padding-left:  (@gutter / 2);
+  padding-right: (@gutter / 2);
+
+  // Calculate width based on number of columns available
+  @media (min-width: @screen-lg-min) {
+    body.ltr & { float: left; }
+    body.rtl & { float: right; }
+    idth: percentage((@columns / @grid-columns));
+  }
+}
+
+// Generate the large column offsets
+.make-lg-column-offset(@columns) {
+  @media (min-width: @screen-lg-min) {
+    margin-right: percentage((@columns / @grid-columns));
+  }
+}
+.make-lg-column-push(@columns) {
+  @media (min-width: @screen-lg-min) {
+    right: percentage((@columns / @grid-columns));
+  }
+}
+.make-lg-column-pull(@columns) {
+  @media (min-width: @screen-lg-min) {
+    left: percentage((@columns / @grid-columns));
+  }
+}
+
+
+// --- Grid framework mixins ------------------------------------------------------------
+
+.float-grid-columns(@class) {
+  .col(@index) { // initial
+    @item: ~"body.rtl .col-@{class}-@{index}";
+    .col((@index + 1), @item);
+  }
+  .col(@index, @list) when (@index =< @grid-columns) { // general
+    @item: ~"body.rtl .col-@{class}-@{index}";
+    .col((@index + 1), ~"@{list}, @{item}");
+  }
+  .col(@index, @list) when (@index > @grid-columns) { // terminal
+    @{list} {
+      float: right;
+    }
+  }
+  .col(1); // kickstart it
+}
+
+.calc-grid-column(@index, @class, @type) when (@type = width) and (@index > 0) {
+  body.rtl .col-@{class}-@{index} {
+    width: percentage((@index / @grid-columns));
+  }
+}
+.calc-grid-column(@index, @class, @type) when (@type = push) and (@index > 0) {
+  body.rtl .col-@{class}-push-@{index} {
+    right: percentage((@index / @grid-columns));
+  }
+}
+.calc-grid-column(@index, @class, @type) when (@type = push) and (@index = 0) {
+  body.rtl .col-@{class}-push-0 {
+    right: auto;
+  }
+}
+.calc-grid-column(@index, @class, @type) when (@type = pull) and (@index > 0) {
+  body.rtl .col-@{class}-pull-@{index} {
+    left: percentage((@index / @grid-columns));
+  }
+}
+.calc-grid-column(@index, @class, @type) when (@type = pull) and (@index = 0) {
+  body.rtl .col-@{class}-pull-0 {
+    left: auto;
+  }
+}
+.calc-grid-column(@index, @class, @type) when (@type = offset) {
+  body.rtl .col-@{class}-offset-@{index} {
+    margin-right: percentage((@index / @grid-columns));
+    margin-left: 0; // Needed ???
+  }
+}
+
+
+// --- Execute grid mixins --------------------------------------------------------------
+
+.make-grid(xs);
+@media (min-width: @screen-sm-min) { .make-grid(sm); }
+@media (min-width: @screen-md-min) { .make-grid(md); }
+@media (min-width: @screen-lg-min) { .make-grid(lg); }
+
+
+// --- Non-grids elements ---------------------------------------------------------------
+
+body.rtl {
+
+  // --- Close icons --------------------------------------------------------------------
+
+  .close {
+    float: left;
+  }
+
+  // --- Alerts -------------------------------------------------------------------------
+
+  .alert-dismissible {
+    padding-right: @alert-padding;
+    padding-left: (@alert-padding + 20);
+
+    // Adjust close link position
+    .close {
+      right: auto;
+      left: -21px;
+    }
+  }
+
+  // --- List groups --------------------------------------------------------------------
+
+  .list-group {
+    padding-right: 0;
+  }
+
+  .list-group-item {
+    // Align badges within list items
+    > .badge {
+      float: left;
+    }
+    > .badge + .badge {
+      margin-right: 0;
+      margin-left: 5px;
+    }
+  }
+
+  // --- Lists --------------------------------------------------------------------------
+
+  .list-unstyled {
+    padding-right: 0;
+  }
+
+  .list-inline {
+    .list-unstyled();
+
+    > li {
+      &:first-child {
+        padding-right: 0; padding-left: 5px;
+      }
+    }
+  }
+
+  dd {
+    margin-right: 0;
+  }
+
+  @media (min-width: @grid-float-breakpoint) {
+    .dl-horizontal {
+      dt {
+        float: right;
+        clear: right;
+        text-align: left;
+      }
+      dd {
+        margin-left: 0; margin-right: @component-offset-horizontal;
+      }
+    }
+  }
+
+
+  // --- Blockquotes --------------------------------------------------------------------
+
+  blockquote {
+    padding-right: 15px;
+    padding-left: 0;
+    border-right: 5px solid @blockquote-border-color;
+    border-left: 0;
+    p,
+    small,
+    .small {
+      text-align: right;
+    }
+    small,
+    .small {
+      &:before {
+        content: '';
+      }
+      &:after {
+        content: '\00A0 \2014'; // NBSP, EM DASH
+      }
+    }
+  }
+
+
+  // --- Dropdowns ----------------------------------------------------------------------
+
+  // Dropdown arrow/caret
+  .caret {
+    margin-left: 0;
+    margin-right: 2px;
+  }
+
+  .dropdown-menu {
+    left: auto;
+    right: 0;
+    float: right;
+    text-align: right;
+
+    // Aligns the dropdown menu to right
+    &.pull-right {
+      right: auto;
+      left: 0;
+    }
+  }
+
+  .dropdown-menu-right {
+    left: 0;
+    right: auto;
+  }
+
+  .dropdown-menu-left {
+    left: auto; // Reset the default from `.dropdown-menu`
+    right: 0;
+  }
+
+  @media (min-width: @grid-float-breakpoint) {
+    .navbar-right {
+      .dropdown-menu {
+        .dropdown-menu-left();
+      }
+      // Necessary for overrides of the default right aligned menu.
+      // Will remove come v4 in all likelihood.
+      .dropdown-menu-left {
+        .dropdown-menu-right();
+      }
+    }
+  }
+
+
+  // --- Forms --------------------------------------------------------------------------
+
+  .radio,
+  .checkbox {
+    label {
+      padding-left: 0;
+      padding-right: 20px;
+    }
+  }
+
+  .radio input[type="radio"],
+  .radio-inline input[type="radio"],
+  .checkbox input[type="checkbox"],
+  .checkbox-inline input[type="checkbox"] {
+    float: right;
+    margin-left: 0;
+    margin-right: -20px;
+  }
+
+  .radio-inline,
+  .checkbox-inline {
+    padding-left: 0;
+    padding-right: 20px;
+  }
+  .radio-inline + .radio-inline,
+  .checkbox-inline + .checkbox-inline {
+    margin-left: 0;
+    margin-right: 10px; // space out consecutive inline controls
+  }
+
+  .form-inline {
+    @media (min-width: @screen-sm) {
+
+      .radio,
+      .checkbox {
+        padding-right: 0;
+      }
+      .radio input[type="radio"],
+      .checkbox input[type="checkbox"] {
+        float: none;
+        margin-right: 0;
+      }
+    }
+  }
+
+  .form-horizontal {
+    @media (min-width: @screen-sm-min) {
+      .control-label {
+        text-align: left;
+      }
+    }
+  }
+
+
+  // --- Navs ---------------------------------------------------------------------------
+
+  .nav { padding-right: 0; }
+
+  .nav-tabs {
+    > li {
+      float: right;
+      > a {
+        margin-left: 2px;
+        margin-right: 0;
+      }
+    }
+  }
+
+  .nav-pills {
+    > li {
+      float: right;
+
+      + li {
+        margin-left: 0;
+        margin-right: 2px;
+      }
+    }
+  }
+
+  .nav-stacked {
+    > li {
+      float: none;
+      + li {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .nav-justified {
+    > li {
+      float: none;
+    }
+
+    > .dropdown .dropdown-menu {
+      right: auto;
+    }
+  }
+
+  // --- Navbars ------------------------------------------------------------------------
+
+  .navbar-header {
+    @media (min-width: @grid-float-breakpoint) {
+      float: right;
+    }
+  }
+
+  .navbar-brand {
+    float: right;
+
+    @media (min-width: @grid-float-breakpoint) {
+      .navbar > .container &,
+      .navbar > .container-fluid & {
+        margin-right: -@navbar-padding-horizontal;
+        margin-left: 0;
+
+      }
+    }
+  }
+
+  .navbar-toggle {
+    float: left;
+    margin-left: @navbar-padding-horizontal;
+    margin-right: 0;
+  }
+
+  .navbar-nav {
+    // Uncollapse the nav
+    @media (min-width: @grid-float-breakpoint) {
+      float: right;
+
+      > li {
+        float: right;
+      }
+    }
+  }
+
+  .navbar-text {
+    @media (min-width: @grid-float-breakpoint) {
+      float: right;
+    }
+  }
+
+  @media (min-width: @grid-float-breakpoint) {
+    .navbar-left  { .pull-right(); }
+    .navbar-right { .pull-left(); }
+
+    .navbar-right {
+      .pull-left();
+      margin-left: -@navbar-padding-horizontal;
+      margin-right: 0;
+
+      ~ .navbar-right {
+        margin-left: 0;
+      }
+    }
+  }
+
+
+  // --- Input groups -------------------------------------------------------------------
+
+  // Reset rounded corners
+  .input-group .form-control:first-child,
+  .input-group-addon:first-child,
+  .input-group-btn:first-child > .btn,
+  .input-group-btn:first-child > .dropdown-toggle,
+  .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+    .border-left-radius(0);
+
+    &.input-md, &.btn-md, &:not(.btn-lg):not(.btn-sm):not(.input-lg):not(.input-sm) { .border-right-radius(@border-radius-base); }
+    &.input-sm, &.btn-sm { .border-right-radius(@border-radius-small); }
+    &.input-lg, &.btn-lg { .border-right-radius(@border-radius-large); }
+  }
+  .input-group-addon:first-child {
+    border-left: 0; border-right: solid 1px @input-group-addon-border-color;
+  }
+  .input-group .form-control:last-child,
+  .input-group-addon:last-child,
+  .input-group-btn:last-child > .btn,
+  .input-group-btn:last-child > .dropdown-toggle,
+  .input-group-btn:first-child > .btn:not(:first-child) {
+    .border-right-radius(0);
+
+    &.input-md, &.btn-md, &:not(.btn-lg):not(.btn-sm):not(.input-lg):not(.input-sm) { .border-left-radius(@border-radius-base); }
+    &.input-sm, &.btn-sm { .border-left-radius(@border-radius-small); }
+    &.input-lg, &.btn-lg { .border-left-radius(@border-radius-large); }
+  }
+  .input-group-addon:last-child {
+    border-right: 0; border-left: solid 1px @input-group-addon-border-color;
+  }
+
+  // Button input groups
+  // -------------------------
+  .input-group-btn {
+    // Negative margin to only have a 1px border between the two
+    &:first-child > .btn {
+      margin-left: -1px;
+    }
+    &:last-child > .btn {
+      margin-right: -1px;
+    }
+  }
+  .input-group-btn > .btn {
+    // Jankily prevent input button groups from wrapping
+    + .btn {
+      margin-right: -4px;
+    }
+  }
+
+
+  // --- Button groups ------------------------------------------------------------------
+
+  .btn-group,
+  .btn-group-vertical {
+    > .btn {
+      float: right;
+    }
+  }
+
+  .btn-group {
+    .btn + .btn,
+    .btn + .btn-group,
+    .btn-group + .btn,
+    .btn-group + .btn-group {
+      margin-right: -1px;
+      margin-left: 0;
+    }
+  }
+
+  .btn-toolbar {
+    .btn-group {
+      float: right;
+    }
+
+    > .btn,
+    > .btn-group {
+      + .btn,
+      + .btn-group {
+        margin-right: 5px;
+        margin-left: 0;
+      }
+    }
+  }
+
+  .btn-group > .btn:first-child {
+    margin-right: 0;
+    &:not(:last-child):not(.dropdown-toggle) {
+      .border-left-radius(0);
+      .border-right-radius(@border-radius-base);
+    }
+  }
+  .btn-group > .btn:last-child:not(:first-child),
+  .btn-group > .dropdown-toggle:not(:first-child) {
+    .border-right-radius(0);
+    .border-left-radius(@border-radius-base);
+  }
+
+  .btn-group > .btn-group {
+    float: right;
+  }
+  .btn-group > .btn-group:first-child {
+    > .btn:last-child,
+    > .dropdown-toggle {
+      .border-left-radius(0);
+      .border-right-radius(@border-radius-base);
+    }
+  }
+  .btn-group > .btn-group:last-child > .btn:first-child {
+    .border-right-radius(0);
+    .border-left-radius(@border-radius-base);
+  }
+
+  // Reposition the caret
+  .btn .caret {
+    margin-right: 0;
+  }
+
+  .btn-group-vertical {
+    > .btn + .btn,
+    > .btn + .btn-group,
+    > .btn-group + .btn,
+    > .btn-group + .btn-group {
+      margin-right: 0;
+    }
+  }
+}

@@ -1,0 +1,229 @@
+// --- Language direction helpers -------------------------
+
+body.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+body.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.float {
+  body.ltr & { float: left !important; }
+  body.rtl & { float: right !important; }
+}
+
+.float-other {
+  body.ltr & { float: right !important; }
+  body.rtl & { float: left !important; }
+}
+
+.float-none {
+  body.ltr & { float: none !important; }
+  body.rtl & { float: none !important; }
+}
+
+.text-aligned {
+  body.ltr & { text-align: left !important; }
+  body.rtl & { text-align: right !important; }
+}
+
+.text-aligned-other {
+  body.ltr & { text-align: right !important; }
+  body.rtl & { text-align: left !important; }
+}
+
+.text-centered {
+  body.ltr & { text-align: center !important; }
+  body.rtl & { text-align: center !important; }
+}
+
+.direction-default {
+  body.ltr & { direction: ltr; }
+  body.rtl & { direction: rtl; }
+}
+
+
+// --- Column line break fix ------------------------------
+
+.fixed-columns {
+
+  // Extra - Small screen only
+  @media (max-width: @screen-xs-max) {
+    .col-xs-2:nth-child(6n+1),
+    .col-xs-3:nth-child(4n+1),
+    .col-xs-4:nth-child(3n+1),
+    .col-xs-6:nth-child(2n+1),
+    .col-xs-5-inline:nth-child(5n+1),
+    .col-xs-7-inline:nth-child(7n+1),
+    .col-xs-8-inline:nth-child(8n+1),
+    .col-xs-9-inline:nth-child(9n+1),
+    .col-xs-10-inline:nth-child(10n+1),
+    .col-xs-11-inline:nth-child(11n+1) {
+      body.ltr & { clear: left; }
+      body.rtl & { clear: right; }
+    }
+  }
+
+  // Small screen only
+  @media (min-width: @screen-sm) and (max-width: @screen-sm-max) {
+    .col-sm-2:nth-child(6n+1),
+    .col-sm-3:nth-child(4n+1),
+    .col-sm-4:nth-child(3n+1),
+    .col-sm-6:nth-child(2n+1) {
+      body.ltr & { clear: left; }
+      body.rtl & { clear: right; }
+    }
+  }
+
+  // Small screen or wider
+  @media (min-width: @screen-sm) {
+    .col-sm-5-inline:nth-child(5n+1),
+    .col-sm-7-inline:nth-child(7n+1),
+    .col-sm-8-inline:nth-child(8n+1),
+    .col-sm-9-inline:nth-child(9n+1),
+    .col-sm-10-inline:nth-child(10n+1),
+    .col-sm-11-inline:nth-child(11n+1) {
+      body.ltr & { clear: left; }
+      body.rtl & { clear: right; }
+    }
+  }
+
+  // Medium or wider
+  @media (min-width: @screen-md) and (max-width: @screen-md-max) {
+    .col-md-2:nth-child(6n+1),
+    .col-md-3:nth-child(4n+1),
+    .col-md-4:nth-child(3n+1),
+    .col-md-6:nth-child(2n+1) {
+      body.ltr & { clear: left; }
+      body.rtl & { clear: right; }
+    }
+  }
+
+  // Large screen
+  @media (min-width: @screen-lg) {
+    .col-lg-2:nth-child(6n+1),
+    .col-lg-3:nth-child(4n+1),
+    .col-lg-4:nth-child(3n+1),
+    .col-lg-6:nth-child(2n+1) {
+      body.ltr & { clear: left; }
+      body.rtl & { clear: right; }
+    }
+  }
+
+}
+
+
+// --- Column sizes ---------------------------------------
+
+@media (min-width: @screen-lg) {
+  .col-lg-5-inline  { width: 100/5% !important }
+  .col-lg-7-inline  { width: 100/7% !important }
+  .col-lg-8-inline  { width: 100/8% !important }
+  .col-lg-9-inline  { width: 100/9% !important }
+  .col-lg-10-inline { width: 100/10% !important }
+  .col-lg-11-inline { width: 100/11% !important }
+}
+
+@media (min-width: @screen-md) {
+  .col-md-5-inline  { width: 100/5% !important }
+  .col-md-7-inline  { width: 100/7% !important }
+  .col-md-8-inline  { width: 100/8% !important }
+  .col-md-9-inline  { width: 100/9% !important }
+  .col-md-10-inline { width: 100/10% !important }
+  .col-md-11-inline { width: 100/11% !important }
+}
+
+@media (min-width: @screen-sm) {
+  .col-sm-5-inline  { width: 100/5% !important }
+  .col-sm-7-inline  { width: 100/7% !important }
+  .col-sm-8-inline  { width: 100/8% !important }
+  .col-sm-9-inline  { width: 100/9% !important }
+  .col-sm-10-inline { width: 100/10% !important }
+  .col-sm-11-inline { width: 100/11% !important }
+}
+
+@media (min-width: @screen-xs) and (max-width: @screen-xs-max){
+  .col-xs-5-inline  { width: 100/5% !important }
+  .col-xs-7-inline  { width: 100/7% !important }
+  .col-xs-8-inline  { width: 100/8% !important }
+  .col-xs-9-inline  { width: 100/9% !important }
+  .col-xs-10-inline { width: 100/10% !important }
+  .col-xs-11-inline { width: 100/11% !important }
+}
+
+
+// --- Animation RTL fix ----------------------------------
+
+body.rtl {
+  .fadeInLeft {
+    -webkit-animation-name: fadeInRight;
+    animation-name: fadeInRight;
+  }
+  .fadeInLeftBig {
+    -webkit-animation-name: fadeInRightBig;
+    animation-name: fadeInRightBig;
+  }
+}
+
+
+// --- Mixins ---------------------------------------------
+
+.transform(@arguments) {
+  -webkit-transform: (@arguments);
+  -ms-transform: (@arguments);
+  -o-transform: (@arguments);
+  transform: @arguments;
+}
+
+.margin-before(@var) {
+  body.ltr & { margin-left: @var; }
+  body.rtl & { margin-right: @var; }
+}
+
+.margin-after(@var) {
+  body.ltr & { margin-right: @var; }
+  body.rtl & { margin-left: @var; }
+}
+
+.margin-vertical(@var) {
+  margin-top: @var;
+  margin-bottom: @var;
+}
+
+.margin-horizontal(@var) {
+  margin-right: @var;
+  margin-left: @var;
+}
+
+.padding-before(@var) {
+  body.ltr & { padding-left: @var; }
+  body.rtl & { padding-right: @var; }
+}
+
+.padding-after(@var) {
+  body.ltr & { padding-right: @var; }
+  body.rtl & { padding-left: @var; }
+}
+
+.padding-vertical(@var) {
+  padding-top: @var;
+  padding-bottom: @var;
+}
+
+.padding-horizontal(@var) {
+  padding-right: @var;
+  padding-left: @var;
+}
+
+.position-start(@var) {
+  body.ltr & { left: @var; }
+  body.rtl & { right: @var; }
+}
+
+.position-end(@var) {
+  body.ltr & { right: @var; }
+  body.rtl & { left: @var; }
+}
